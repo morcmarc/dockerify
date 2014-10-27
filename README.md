@@ -1,6 +1,8 @@
 dockerify
 =========
 
+[![Build Status](https://travis-ci.org/morcmarc/dockerify.svg?branch=master)](https://travis-ci.org/morcmarc/dockerify)
+
 Small command-line utility for creating Dockerfiles easily. It will attempt to
 discover the project type (e.g.: NodeJS, Go etc) and generate a Dockerfile
 using the curated list on [Dockerfile](http://dockerfile.github.io/).
