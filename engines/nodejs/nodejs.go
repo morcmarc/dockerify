@@ -22,6 +22,6 @@ func (n *NodeJs) Discover(path string) bool {
 }
 
 func (n *NodeJs) GetDockerfileTemplate() string {
-	commands := shared.GetCommandString(Command[0:len(Command)])
+	commands := shared.GetCommandString(Command)
 	return fmt.Sprintf(shared.DockerfileTemplate, Image, Custom, commands, Expose)
 }

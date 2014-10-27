@@ -26,7 +26,7 @@ func TestGetDockerfileTemplateNotEmpty(t *testing.T) {
 	}
 }
 
-func TestGetDockerfileTemplateCorroctTemplate(t *testing.T) {
+func TestGetDockerfileTemplateCorrectTemplate(t *testing.T) {
 	e := &NodeJs{}
 	dft := e.GetDockerfileTemplate()
 	if dft != template {
