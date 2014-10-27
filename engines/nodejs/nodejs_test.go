@@ -1,35 +1,30 @@
 package nodejs
 
 import (
+	"fmt"
+	"io"
 	"testing"
-
-	// "github.com/morcmarc/dockerify/shared"
 )
 
-var template = `
-# Pull base image
-FROM dockerfile/nodejs-runtime
-
-# Any custom commands
-
-# Define default command
-CMD ["npm","start"]
-
-# Expose port
-EXPOSE 8080
-`
-
-func TestGetDockerfileTemplateNotEmpty(t *testing.T) {
-	e := &NodeJs{}
-	if e.GetDockerfileTemplate() == "" {
-		t.Errorf("Was expecting dockerfile, got empty string")
-	}
+type WriterMock struct {
+	io.Writer
+	output []byte
 }
 
-func TestGetDockerfileTemplateCorrectTemplate(t *testing.T) {
-	e := &NodeJs{}
-	dft := e.GetDockerfileTemplate()
-	if dft != template {
-		t.Errorf("Was expecting: %s\n, got: %s", template, dft)
+func (w *WriterMock) Write(p []byte) (n int, err error) {
+	w.output = append(w.output, p...)
+	return len(p), nil
+}
+
+func TestGenerateDockerfile(t *testing.T) {
+	ne := &NodeJs{}
+	writer := &WriterMock{}
+	expected := "FROM dockerfiles/nodejs-runtime\n\n\n"
+
+	ne.GenerateDockerfile(writer)
+
+	outstring := fmt.Sprintf("%s", writer.output)
+	if outstring != expected {
+		t.Errorf("Was expecting %s, got: %s", expected, outstring)
 	}
 }

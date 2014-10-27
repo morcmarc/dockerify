@@ -1,6 +1,10 @@
 package shared
 
+import (
+	"io"
+)
+
 type Engine interface {
 	Discover(path string) bool
-	GetDockerfileTemplate() string
+	GenerateDockerfile(out io.Writer) error
 }

@@ -37,12 +37,11 @@ func main() {
 		os.Exit(10)
 	}
 
-	dft, err := engines.GetDockerTemplate(path)
+	err := engines.GetDockerTemplate(path)
 	if err != nil {
 		fmt.Printf("Error: %s", err)
 		os.Exit(20)
 	}
 
-	fmt.Printf("Generating Dockerfile template: \n%s", dft)
 	os.Exit(0)
 }

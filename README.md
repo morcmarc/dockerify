@@ -2,7 +2,7 @@ dockerify
 =========
 
 Small command-line utility for creating Dockerfiles easily. It will attempt to
-to discover the project type (e.g.: NodeJS, Go etc) and generate a Dockerfile
+discover the project type (e.g.: NodeJS, Go etc) and generate a Dockerfile
 using the curated list on [Dockerfile](http://dockerfile.github.io/).
 
 Currently you have to compile it yourself, but I plan to add the cross-compiled

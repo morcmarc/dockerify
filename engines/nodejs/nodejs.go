@@ -1,16 +1,10 @@
 package nodejs
 
 import (
-	"fmt"
+	"io"
 
 	"github.com/morcmarc/dockerify/shared"
-)
-
-var (
-	Image   = "dockerfile/nodejs-runtime"
-	Custom  = "# Any custom commands"
-	Expose  = "8080"
-	Command = "npm start"
+	"github.com/morcmarc/dockerify/utils"
 )
 
 type NodeJs struct {
@@ -21,7 +15,12 @@ func (n *NodeJs) Discover(path string) bool {
 	return true
 }
 
-func (n *NodeJs) GetDockerfileTemplate() string {
-	commands := shared.GetCommandString(Command)
-	return fmt.Sprintf(shared.DockerfileTemplate, Image, Custom, commands, Expose)
+func (n *NodeJs) GenerateDockerfile(out io.Writer) error {
+	params := &utils.DockerfileParams{
+		Image: "dockerfiles/nodejs-runtime",
+	}
+	if err := utils.ParseTemplate(params, out); err != nil {
+		return err
+	}
+	return nil
 }
