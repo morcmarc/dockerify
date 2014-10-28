@@ -91,8 +91,9 @@ func TestValidateFilesWithSingleValidFile(t *testing.T) {
 		pathUtils: new(PathUtilsMock),
 	}
 	files := []string{"a.ext"}
-	if ok := validator.ValidateFiles(files); !ok {
-		t.Errorf("Was expecting true, got false")
+	l := len(validator.ValidateFiles(files))
+	if l != 1 {
+		t.Errorf("Was expecting 1, got %d", l)
 	}
 }
 
@@ -102,8 +103,9 @@ func TestValidateFilesWithInvalidFile(t *testing.T) {
 		pathUtils: new(PathUtilsMock),
 	}
 	files := []string{"i.vld"}
-	if ok := validator.ValidateFiles(files); ok {
-		t.Errorf("Was expecting false, got true")
+	l := len(validator.ValidateFiles(files))
+	if l != 0 {
+		t.Errorf("Was expecting 0, got: %d", l)
 	}
 }
 
@@ -113,7 +115,8 @@ func TestValidateFilesWithMultipleFiles(t *testing.T) {
 		pathUtils: new(PathUtilsMock),
 	}
 	files := []string{"i.vld", "a.ext"}
-	if ok := validator.ValidateFiles(files); !ok {
+	l := len(validator.ValidateFiles(files))
+	if l != 1 {
 		t.Errorf("Was expecting true, got false")
 	}
 }

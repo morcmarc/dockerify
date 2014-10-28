@@ -28,9 +28,11 @@ func GetDockerTemplate(path string) error {
 
 // Initiate engines
 func createEngines(path string) map[string]shared.Engine {
+	pathValidator := utils.NewPathValidator(path)
+	fileUtils := new(utils.OSFileUtils)
 	engines := make(map[string]shared.Engine)
 
-	engines["nodejs"] = nodejs.NewEngine(path)
+	engines["nodejs"] = nodejs.NewEngine(path, pathValidator, fileUtils)
 
 	return engines
 }

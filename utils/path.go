@@ -55,12 +55,12 @@ func (p *PathValidator) ValidatePath() error {
 
 // Checks whether the given list of filenames can be found relative to the base
 // path the object was initiated with.
-func (p *PathValidator) ValidateFiles(files []string) bool {
-	found := false
+func (p *PathValidator) ValidateFiles(files []string) []string {
+	found := []string{}
 	for _, f := range files {
 		fp := filepath.Join(p.path, f)
 		if _, err := p.pathUtils.Stat(fp); err == nil {
-			found = true
+			found = append(found, f)
 		}
 	}
 	return found
