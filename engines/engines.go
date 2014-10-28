@@ -9,20 +9,26 @@ import (
 	"github.com/morcmarc/dockerify/shared"
 )
 
-func GetEngines() map[string]shared.Engine {
-	engines := make(map[string]shared.Engine)
-	engines["nodejs"] = &nodejs.NodeJs{}
-	return engines
-}
-
+// Will attempt to determine project type and parses a Dockerfile template
 func GetDockerTemplate(path string) error {
-	engines := GetEngines()
+	engines := createEngines(path)
+
 	for i, engine := range engines {
-		if engine.Discover(path) {
+		if engine.Discover() {
 			fmt.Printf("Found project type: %s\n", i)
 			engine.GenerateDockerfile(os.Stdout)
 			return nil
 		}
 	}
-	return errors.New("Could not determine project type")
+
+	return errors.New("Could not determine project type\n")
+}
+
+// Initiate engines
+func createEngines(path string) map[string]shared.Engine {
+	engines := make(map[string]shared.Engine)
+
+	engines["nodejs"] = nodejs.NewEngine(path)
+
+	return engines
 }

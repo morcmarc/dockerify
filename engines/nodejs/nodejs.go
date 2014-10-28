@@ -9,10 +9,22 @@ import (
 
 type NodeJs struct {
 	shared.Engine
+	path          string
+	checkFiles    []string
+	pathValidator *utils.PathValidator
 }
 
-func (n *NodeJs) Discover(path string) bool {
-	return true
+func NewEngine(path string) *NodeJs {
+	njs := &NodeJs{
+		path:          path,
+		checkFiles:    []string{"package.json", "server.js"},
+		pathValidator: utils.NewPathValidator(path),
+	}
+	return njs
+}
+
+func (n *NodeJs) Discover() bool {
+	return n.pathValidator.ValidateFiles(n.checkFiles)
 }
 
 func (n *NodeJs) GenerateDockerfile(out io.Writer) error {

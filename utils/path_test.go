@@ -10,12 +10,20 @@ type PathUtilsMock struct {
 	PathUtils
 }
 
+type DirInfoMock struct {
+	os.FileInfo
+}
+
 type FileInfoMock struct {
 	os.FileInfo
 }
 
 func (f FileInfoMock) IsDir() bool {
 	return false
+}
+
+func (f DirInfoMock) IsDir() bool {
+	return true
 }
 
 func (p PathUtilsMock) Stat(path string) (os.FileInfo, error) {
@@ -26,7 +34,25 @@ func (p PathUtilsMock) Stat(path string) (os.FileInfo, error) {
 	if path == "invalidpath" {
 		return nil, errors.New("invalid path")
 	}
-	return nil, nil
+	if path == "dirpath" {
+		di := new(DirInfoMock)
+		return di, nil
+	}
+	if path == "dirpath/a.ext" {
+		fi := new(FileInfoMock)
+		return fi, nil
+	}
+	return nil, errors.New("Does not exists")
+}
+
+func TestValidatePathWithValidPath(t *testing.T) {
+	validator := &PathValidator{
+		path:      "dirpath",
+		pathUtils: new(PathUtilsMock),
+	}
+	if err := validator.ValidatePath(); err != nil {
+		t.Errorf("Was not expecting error")
+	}
 }
 
 func TestValidatePathWithEmptyPath(t *testing.T) {
@@ -56,5 +82,38 @@ func TestValidatePathWithInvalidPath(t *testing.T) {
 	}
 	if err := validator.ValidatePath(); err == nil {
 		t.Errorf("Was expecting invalid path error")
+	}
+}
+
+func TestValidateFilesWithSingleValidFile(t *testing.T) {
+	validator := &PathValidator{
+		path:      "dirpath",
+		pathUtils: new(PathUtilsMock),
+	}
+	files := []string{"a.ext"}
+	if ok := validator.ValidateFiles(files); !ok {
+		t.Errorf("Was expecting true, got false")
+	}
+}
+
+func TestValidateFilesWithInvalidFile(t *testing.T) {
+	validator := &PathValidator{
+		path:      "dirpath",
+		pathUtils: new(PathUtilsMock),
+	}
+	files := []string{"i.vld"}
+	if ok := validator.ValidateFiles(files); ok {
+		t.Errorf("Was expecting false, got true")
+	}
+}
+
+func TestValidateFilesWithMultipleFiles(t *testing.T) {
+	validator := &PathValidator{
+		path:      "dirpath",
+		pathUtils: new(PathUtilsMock),
+	}
+	files := []string{"i.vld", "a.ext"}
+	if ok := validator.ValidateFiles(files); !ok {
+		t.Errorf("Was expecting true, got false")
 	}
 }
