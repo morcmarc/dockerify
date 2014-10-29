@@ -1,3 +1,14 @@
+/*
+This package allows discovering NodeJS-type projects. Will try to see if there
+is a "package.json" file in the root path, then it'll do the following checks:
+
+	package.json (mandatory):
+		- there is a "server.js" in the root path
+		OR
+		- "scripts" object has got a "start" command
+		- file given to "start" command does exist
+		- either "express" or "koa" is present in "dependecies" or "devDependencies" list
+*/
 package nodejs
 
 import (
@@ -21,7 +32,7 @@ type NodeJs struct {
 func NewEngine(path string, pValidator *utils.PathValidator, fUtils utils.FileUtils) *NodeJs {
 	njs := &NodeJs{
 		path:          path,
-		checkFiles:    []string{"package.json", "server.js"},
+		checkFiles:    []string{"server.js", "package.json"},
 		pathValidator: pValidator,
 		fileUtils:     fUtils,
 	}
@@ -33,6 +44,9 @@ func (n *NodeJs) Discover() bool {
 	result := false
 
 	for _, f := range valid {
+		if f == "server.js" {
+			result = true
+		}
 		if f == "package.json" {
 			result = n.validatePackageJson()
 		}
@@ -66,8 +80,13 @@ func (n *NodeJs) validatePackageJson() bool {
 		return false
 	}
 
-	deps := content["dependencies"].(map[string]interface{})
-	if _, ok := deps["express"]; ok {
+	scripts := content["scripts"].(map[string]interface{})
+	if _, ok := scripts["start"]; !ok {
+		fmt.Errorf("No scripts attribute")
+		return false
+	}
+
+	if scripts["start"] == "node ./app.js" {
 		return true
 	}
 

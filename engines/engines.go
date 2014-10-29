@@ -1,3 +1,8 @@
+/*
+Engines are basically project descriptors and can do certain checks on a
+given path to determine the type of the application. If a type has been found
+a sample Dockerfile will be generated to specified output (e.g.: stdout or file)
+*/
 package engines
 
 import (
@@ -10,7 +15,7 @@ import (
 	"github.com/morcmarc/dockerify/utils"
 )
 
-// Will attempt to determine project type and parses a Dockerfile template
+// Will attempt to determine project type at given path and create a Dockerfile
 func GetDockerTemplate(path string) error {
 	engines := createEngines(path)
 

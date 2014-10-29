@@ -7,17 +7,26 @@ import (
 	"text/template"
 )
 
+// Dockerfile descriptor
 type DockerfileParams struct {
 	Image   string
 	Command string
 	Expose  string
 }
 
+// Raw Dockerfile template
 const dockerfileTemplate = `FROM {{.Image}}
 {{if .Command}}CMD {{.Command}}{{end}}
 {{if .Expose}}EXPOSE {{.Expose}}{{end}}
 `
 
+/*
+Wraps each word in the given string in double-quotes, then the whole sentence
+into square brackets. Example:
+
+	"docker -t -i test/image ./run.sh" =>
+	["docker","-t","-i","test/image","./run.sh"]
+*/
 func GetCommandString(commands string) string {
 	if len(commands) == 0 {
 		return ""
@@ -34,6 +43,8 @@ func GetCommandString(commands string) string {
 	return "[" + strings.Join(commandStr, ",") + "]"
 }
 
+// Compiles a Dockerfile template with the given DockerfileParams and writes
+// the result to the specified output
 func ParseTemplate(params *DockerfileParams, out io.Writer) error {
 	if err := ValidateTemplateParams(params); err != nil {
 		return err
@@ -53,6 +64,7 @@ func ParseTemplate(params *DockerfileParams, out io.Writer) error {
 	return nil
 }
 
+// Validates the given DockerfileParams object for mandatory attributes
 func ValidateTemplateParams(params *DockerfileParams) error {
 	if params.Image == "" {
 		return errors.New("Missing image parameter")
