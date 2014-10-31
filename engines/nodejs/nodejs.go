@@ -45,9 +45,11 @@ func (n *NodeJs) Discover() bool {
 
 	for _, f := range valid {
 		if f == "server.js" {
+			fmt.Println("-->> Validating server.js")
 			result = true
 		}
 		if f == "package.json" {
+			fmt.Println("-->> Validating package.json")
 			result = n.validatePackageJson()
 		}
 	}
@@ -69,7 +71,7 @@ func (n *NodeJs) validatePackageJson() bool {
 	filename := path.Join(n.path, "package.json")
 
 	b, err := n.fileUtils.ReadFile(filename)
-	if err != nil {
+	if err != nil || b == nil {
 		fmt.Errorf("Failed reading package file: %s\n", err)
 		return false
 	}
@@ -82,13 +84,9 @@ func (n *NodeJs) validatePackageJson() bool {
 
 	scripts := content["scripts"].(map[string]interface{})
 	if _, ok := scripts["start"]; !ok {
-		fmt.Errorf("No scripts attribute")
+		fmt.Errorf("No start script attribute")
 		return false
 	}
 
-	if scripts["start"] == "node ./app.js" {
-		return true
-	}
-
-	return false
+	return true
 }

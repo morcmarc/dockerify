@@ -30,7 +30,7 @@ type FileInfoMock struct {
 }
 
 func (f FileUtilsMock) ReadFile(filename string) ([]byte, error) {
-	return nil, nil
+	return ioutil.ReadFile(filename)
 }
 
 func TestGenerateDockerfile(t *testing.T) {
@@ -77,15 +77,13 @@ func TestDiscoverChecksPackageFileStartScript(t *testing.T) {
 	}
 
 	testData := `{
-	"name": "test",
-	"scripts": {
-		"start": "node ./app.js"
-	},
-	"dependencies": {
-	},
-	"devDependencies":{
-	}
-}`
+		"name": "test",
+		"scripts": {
+			"start": "node ./app.js"
+		},
+		"dependencies": { },
+		"devDependencies": { }
+	}`
 	if err := ioutil.WriteFile(path.Join(p, "package.json"), []byte(testData), 0777); err != nil {
 		t.Fatalf("Could not create temp package.json: %s", err)
 	}
