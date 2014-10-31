@@ -67,6 +67,12 @@ func (n *NodeJs) GenerateDockerfile(out io.Writer) error {
 	return nil
 }
 
+func (n *NodeJs) Instructions() {
+	usage := `The image assumes that your application:
+- listens on port 8080`
+	fmt.Println(utils.Colorize(usage, utils.C_RED))
+}
+
 func (n *NodeJs) validatePackageJson() bool {
 	filename := path.Join(n.path, "package.json")
 

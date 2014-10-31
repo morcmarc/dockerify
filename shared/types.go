@@ -5,7 +5,7 @@ import (
 )
 
 type Engine interface {
-	NewEngine(path string) *Engine
 	Discover() bool
+	Instructions()
 	GenerateDockerfile(out io.Writer) error
 }
