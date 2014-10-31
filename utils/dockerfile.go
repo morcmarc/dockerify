@@ -15,10 +15,7 @@ type DockerfileParams struct {
 }
 
 // Raw Dockerfile template
-const dockerfileTemplate = `FROM {{.Image}}
-{{if .Command}}CMD {{.Command}}{{end}}
-{{if .Expose}}EXPOSE {{.Expose}}{{end}}
-`
+const dockerfileTemplate = "FROM {{.Image}}\n{{if .Command}}CMD {{.Command}}\n{{end}}{{if .Expose}}EXPOSE {{.Expose}}\n{{end}}"
 
 /*
 Wraps each word in the given string in double-quotes, then the whole sentence

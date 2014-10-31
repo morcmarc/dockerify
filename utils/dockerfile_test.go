@@ -48,7 +48,7 @@ func TestParseTemplateWorksWithImageOnly(t *testing.T) {
 		Image: "test/image",
 	}
 	writer := &WriterMock{}
-	expected := "FROM test/image\n\n\n"
+	expected := "FROM test/image\n"
 
 	ParseTemplate(params, writer)
 

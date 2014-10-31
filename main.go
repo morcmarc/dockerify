@@ -14,11 +14,13 @@ const (
 )
 
 var (
-	versionFlag bool
+	versionFlag      bool
+	createDockerfile bool
 )
 
 func init() {
 	flag.BoolVar(&versionFlag, "version", false, "Print version and exit")
+	flag.BoolVar(&createDockerfile, "w", true, "Create and write Dockerfile")
 }
 
 func main() {
@@ -37,7 +39,7 @@ func main() {
 		os.Exit(10)
 	}
 
-	err := engines.GetDockerTemplate(path)
+	err := engines.GetDockerTemplate(path, createDockerfile)
 	if err != nil {
 		fmt.Printf("Error: %s", err)
 		os.Exit(20)

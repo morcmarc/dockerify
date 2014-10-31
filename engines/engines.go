@@ -9,6 +9,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	p "path"
 
 	"github.com/morcmarc/dockerify/engines/golang"
 	"github.com/morcmarc/dockerify/engines/nodejs"
@@ -17,18 +18,34 @@ import (
 )
 
 // Will attempt to determine project type at given path and create a Dockerfile
-func GetDockerTemplate(path string) error {
+func GetDockerTemplate(path string, createDockerfile bool) error {
+	output := os.Stdout
+	if createDockerfile {
+		f, err := os.Create(p.Join(path, "Dockerfile"))
+		if err != nil {
+			panic(err)
+		}
+		output = f
+	}
+
 	engines := createEngines(path)
 
 	for i, engine := range engines {
 		if engine.Discover() {
-			fmt.Printf("-->> Found project type: %s\n", utils.Colorize(i, utils.C_YELLOW))
-			fmt.Printf("-->> %s:\n\n", utils.Colorize("Dockerfile", utils.C_GREEN))
-			engine.GenerateDockerfile(os.Stdout)
+			fmt.Printf("-->> %s\n", utils.Colorize("Found project type: "+i, utils.C_YELLOW))
+			fmt.Printf("-->> %s\n", utils.Colorize("Writing Dockerfile", utils.C_GREEN))
+			engine.GenerateDockerfile(output)
+			fmt.Printf("-->> %s\n", utils.Colorize("Instructions:", utils.C_YELLOW))
 			engine.Instructions()
 			return nil
 		}
 	}
+
+	defer func() {
+		if err := output.Close(); err != nil {
+			panic(err)
+		}
+	}()
 
 	return errors.New("Could not determine project type\n")
 }
