@@ -77,7 +77,6 @@ func TestDiscoverChecksPackageFileStartScript(t *testing.T) {
 	}
 
 	testData := `{
-		"name": "test",
 		"scripts": {
 			"start": "node ./app.js"
 		},

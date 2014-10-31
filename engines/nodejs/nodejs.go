@@ -29,6 +29,12 @@ type NodeJs struct {
 	fileUtils     utils.FileUtils
 }
 
+type packageJson struct {
+	Scripts         map[string]interface{} `json:"scripts"`
+	Dependencies    map[string]interface{} `json:"dependencies"`
+	DevDependencies map[string]interface{} `json:"devDependencies"`
+}
+
 func NewEngine(path string, pValidator *utils.PathValidator, fUtils utils.FileUtils) *NodeJs {
 	njs := &NodeJs{
 		path:          path,
@@ -82,14 +88,13 @@ func (n *NodeJs) validatePackageJson() bool {
 		return false
 	}
 
-	var content map[string]interface{}
+	var content packageJson
 	if err := json.Unmarshal(b, &content); err != nil {
 		fmt.Errorf("Failed unmarshaling package file contents: %s\n", err)
 		return false
 	}
 
-	scripts := content["scripts"].(map[string]interface{})
-	if _, ok := scripts["start"]; !ok {
+	if _, ok := content.Scripts["start"]; !ok {
 		fmt.Errorf("No start script attribute")
 		return false
 	}
