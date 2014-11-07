@@ -2,6 +2,7 @@ package utils
 
 import (
 	"errors"
+	"io"
 
 	"gopkg.in/yaml.v2"
 )
@@ -59,4 +60,16 @@ func (f *FigFile) GetYaml() ([]byte, error) {
 		return nil, err
 	}
 	return y, nil
+}
+
+func (f *FigFile) WriteConfig(out io.Writer) error {
+	b, err := f.GetYaml()
+	if err != nil {
+		return err
+	}
+	n, err := out.Write(b)
+	if err != nil || n == 0 {
+		return err
+	}
+	return nil
 }

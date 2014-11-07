@@ -6,6 +6,7 @@ import (
 
 type Engine interface {
 	Discover() bool
-	Instructions()
 	GenerateDockerfile(out io.Writer) error
+	GenerateFigConfig(out io.Writer) error
+	Instructions()
 }

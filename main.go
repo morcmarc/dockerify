@@ -42,7 +42,7 @@ func main() {
 		os.Exit(10)
 	}
 
-	if err := engines.GetDockerTemplate(path, createDockerfile); err != nil {
+	if err := engines.GetDockerTemplate(path, createDockerfile, useFig); err != nil {
 		fmt.Printf("Error: %s", err)
 		os.Exit(20)
 	}

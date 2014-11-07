@@ -44,6 +44,20 @@ func (g *Golang) GenerateDockerfile(out io.Writer) error {
 	return nil
 }
 
+func (g *Golang) GenerateFigConfig(out io.Writer) error {
+	ff := utils.NewFigFile()
+	fa, err := utils.NewFigApplication("", ".")
+	if err != nil {
+		return err
+	}
+	fa.Ports = []string{"8080:8080"}
+	ff.AddApplication("app", fa)
+	if err := ff.WriteConfig(out); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (g *Golang) Instructions() {
 	usage := `The image assumes that your application:
 - listens on port 8080

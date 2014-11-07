@@ -8,6 +8,7 @@ package engines
 import (
 	"errors"
 	"fmt"
+	"io"
 	"os"
 	p "path"
 
@@ -18,34 +19,29 @@ import (
 )
 
 // Will attempt to determine project type at given path and create a Dockerfile
-func GetDockerTemplate(path string, createDockerfile bool) error {
-	output := os.Stdout
-	if createDockerfile {
-		f, err := os.Create(p.Join(path, "Dockerfile"))
-		if err != nil {
-			panic(err)
-		}
-		output = f
-	}
-
+func GetDockerTemplate(path string, createDockerfile, useFig bool) error {
 	engines := createEngines(path)
 
 	for i, engine := range engines {
 		if engine.Discover() {
 			fmt.Printf("-->> %s\n", utils.Colorize("Found project type: "+i, utils.C_YELLOW))
+
+			dfw := getDockerfileWriter(path, createDockerfile)
 			fmt.Printf("-->> %s\n", utils.Colorize("Writing Dockerfile", utils.C_GREEN))
-			engine.GenerateDockerfile(output)
+			engine.GenerateDockerfile(dfw)
+
+			if useFig {
+				ffw := getFigfileWriter(path)
+				fmt.Printf("-->> %s\n", utils.Colorize("Writing Fig config", utils.C_GREEN))
+				engine.GenerateFigConfig(ffw)
+			}
+
 			fmt.Printf("-->> %s\n", utils.Colorize("Instructions:", utils.C_YELLOW))
 			engine.Instructions()
+
 			return nil
 		}
 	}
-
-	defer func() {
-		if err := output.Close(); err != nil {
-			panic(err)
-		}
-	}()
 
 	return errors.New("Could not determine project type\n")
 }
@@ -60,4 +56,26 @@ func createEngines(path string) map[string]shared.Engine {
 	engines["nodejs"] = nodejs.NewEngine(path, pathValidator, fileUtils)
 
 	return engines
+}
+
+func getDockerfileWriter(path string, createDockerfile bool) io.Writer {
+	output := os.Stdout
+	if createDockerfile {
+		f, err := os.Create(p.Join(path, "Dockerfile"))
+		if err != nil {
+			panic(err)
+		}
+		output = f
+	}
+
+	return output
+}
+
+func getFigfileWriter(path string) *os.File {
+	figFileWriter, err := os.Create(p.Join(path, "fig.yml"))
+	if err != nil {
+		panic(err)
+	}
+
+	return figFileWriter
 }
