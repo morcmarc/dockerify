@@ -17,6 +17,8 @@ import (
 	"io"
 	"path"
 
+	"github.com/morcmarc/dockerify/docker"
+	"github.com/morcmarc/dockerify/fig"
 	"github.com/morcmarc/dockerify/shared"
 	"github.com/morcmarc/dockerify/utils"
 )
@@ -64,18 +66,18 @@ func (n *NodeJs) Discover() bool {
 }
 
 func (n *NodeJs) GenerateDockerfile(out io.Writer) error {
-	params := &utils.DockerfileParams{
+	params := &docker.DockerfileParams{
 		Image: "dockerfiles/nodejs-runtime",
 	}
-	if err := utils.ParseTemplate(params, out); err != nil {
+	if err := docker.ParseTemplate(params, out); err != nil {
 		return err
 	}
 	return nil
 }
 
 func (n *NodeJs) GenerateFigConfig(out io.Writer) error {
-	ff := utils.NewFigFile()
-	fa, err := utils.NewFigApplication("", ".")
+	ff := fig.NewFigFile()
+	fa, err := fig.NewFigApplication("", ".")
 	if err != nil {
 		return err
 	}
