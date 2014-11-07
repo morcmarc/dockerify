@@ -16,10 +16,13 @@ const (
 var (
 	versionFlag      bool
 	createDockerfile bool
+	useFig           bool
+	path             string
 )
 
 func init() {
 	flag.BoolVar(&versionFlag, "version", false, "Print version and exit")
+	flag.BoolVar(&useFig, "fig", true, "Create fig file")
 	flag.BoolVar(&createDockerfile, "w", true, "Create and write Dockerfile")
 }
 
@@ -31,7 +34,7 @@ func main() {
 		os.Exit(0)
 	}
 
-	path := flag.Arg(0)
+	path = flag.Arg(0)
 	pathValidator := utils.NewPathValidator(path)
 
 	if err := pathValidator.ValidatePath(); err != nil {
@@ -39,8 +42,7 @@ func main() {
 		os.Exit(10)
 	}
 
-	err := engines.GetDockerTemplate(path, createDockerfile)
-	if err != nil {
+	if err := engines.GetDockerTemplate(path, createDockerfile); err != nil {
 		fmt.Printf("Error: %s", err)
 		os.Exit(20)
 	}
