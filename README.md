@@ -12,14 +12,17 @@ binaries in the future.
 
 ## Compiling
 
-The project hasn't got any external dependencies so far, which means you can
-just run `go build`, but you can also use `make install` (a bit more verbose).
+Install dependencies with godep first, then run `go build`. You can also use `make install` (a bit more verbose).
 
 ## Usage
 
 ```bash
 $ dfy /path/to/project/root
 ```
+
+## Planned features (subject to change a lot)
+
+- Full [fig](http://fig.sh) support
 
 ## Supported environments
 
