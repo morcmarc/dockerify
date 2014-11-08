@@ -1,7 +1,6 @@
 {
-	"PackageVersion": "0.2.0",
-	"PrereleaseInfo": "snapshot",
-	"ConfigVersion": "0.9",
+  "PackageVersion": "v0.2.0",
+  "ConfigVersion": "0.9",
   "BuildConstraints": "windows,linux,darwin,amd64,386",
   "TaskSettings" : {
       "bintray" : {

@@ -1,7 +1,7 @@
 dockerify
 =========
 
-[![Build Status](https://travis-ci.org/morcmarc/dockerify.svg?branch=master)](https://travis-ci.org/morcmarc/dockerify) [![GoDoc](https://godoc.org/github.com/morcmarc/dockerify?status.svg)](https://godoc.org/github.com/morcmarc/dockerify)
+[![Build Status](https://travis-ci.org/morcmarc/dockerify.svg?branch=master)](https://travis-ci.org/morcmarc/dockerify) [![GoDoc](https://godoc.org/github.com/morcmarc/dockerify?status.svg)](https://godoc.org/github.com/morcmarc/dockerify)[ ![Download](https://api.bintray.com/packages/morcmarc/dockerify/dockerify/images/download.svg) ](https://bintray.com/morcmarc/dockerify/dockerify/_latestVersion)
 
 Small command-line utility for creating Dockerfiles easily. It will attempt to
 discover the project type (e.g.: NodeJS, Go etc) and generate a Dockerfile
