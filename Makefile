@@ -2,7 +2,7 @@ test:
 	@go test ./...
 
 all:
-	@go build -o bin/dfy -v
+	@go build -o bin/dockerify -v
 
 install: all
-	@cp bin/dfy ${GOPATH}/bin
+	@cp bin/dockerify ${GOPATH}/bin

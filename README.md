@@ -5,19 +5,28 @@ dockerify
 
 Small command-line utility for creating Dockerfiles easily. It will attempt to
 discover the project type (e.g.: NodeJS, Go etc) and generate a Dockerfile
-using the curated list on [Dockerfile](http://dockerfile.github.io/).
+based on the curated list at [Dockerfile](http://dockerfile.github.io/).
 
-Currently you have to compile it yourself, but I plan to add the cross-compiled
-binaries in the future.
+## Building
 
-## Compiling
+For development:
 
-Install dependencies with godep first, then run `go build`. You can also use `make install` (a bit more verbose).
+```bash
+$ make install
+```
+
+To compile the release version install [goxc](https://github.com/laher/goxc) first then run:
+
+```bash
+$ goxc
+```
+
+This will output all cross-compiled binaries into your $GOPATH/bin folder.
 
 ## Usage
 
 ```bash
-$ dfy /path/to/project/root
+$ dockerify /path/to/project
 ```
 
 ## Planned features (subject to change a lot)

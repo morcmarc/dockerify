@@ -7,7 +7,7 @@
           "package" : "dockerify",
           "subject": "morcmarc",
           "repository": "dockerify",
-          "downloadspage": "bintray.md"
+          "downloadspage": "downloads.md"
       }
   }
 }
