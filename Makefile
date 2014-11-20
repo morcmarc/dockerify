@@ -1,8 +1,21 @@
-test: 
-	@go test ./...
+all: deps test install
 
-all:
-	@go build -o bin/dockerify -v
+compile:
+	@echo "--> Cross-compiling"
+	@goxc
 
-install: all
-	@cp bin/dockerify ${GOPATH}/bin
+bintray: compile
+	@echo "--> Publishing"
+	@goxc bintray
+
+install:
+	@echo "--> Installing"
+	@go install
+
+deps:
+	@echo "--> Resolving dependencies"
+	@godeps restore
+
+test:
+	@echo "--> Running tests"
+	@go test -cover ./...

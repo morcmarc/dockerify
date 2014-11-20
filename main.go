@@ -1,51 +1,51 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"os"
 
+	"github.com/codegangsta/cli"
 	"github.com/morcmarc/dockerify/engines"
 	"github.com/morcmarc/dockerify/utils"
 )
 
-const (
-	Version = "0.2.0"
-)
-
-var (
-	versionFlag      bool
-	createDockerfile bool
-	useFig           bool
-	path             string
-)
-
-func init() {
-	flag.BoolVar(&versionFlag, "version", false, "Print version and exit")
-	flag.BoolVar(&useFig, "fig", true, "Create fig file")
-	flag.BoolVar(&createDockerfile, "w", true, "Create and write Dockerfile")
+func main() {
+	app := cli.NewApp()
+	app.Name = "dockerify"
+	app.Version = "0.2.0"
+	app.Usage = "\"dockerize\" and \"figify\" your app"
+	app.Flags = []cli.Flag{
+		cli.BoolFlag{
+			Name:  "fig, f",
+			Usage: "generate fig.yml",
+		},
+		cli.BoolFlag{
+			Name:  "docker, d",
+			Usage: "generate Dockerfile",
+		},
+	}
+	app.Action = func(c *cli.Context) {
+		runApp(c)
+	}
+	app.Run(os.Args)
 }
 
-func main() {
-	flag.Parse()
-
-	if versionFlag {
-		fmt.Printf("Dockerify v%s\n", Version)
-		os.Exit(0)
-	}
-
-	path = flag.Arg(0)
-	pathValidator := utils.NewPathValidator(path)
-
-	if err := pathValidator.ValidatePath(); err != nil {
-		fmt.Printf("Error: %s", err)
+func runApp(c *cli.Context) {
+	if len(c.Args()) == 0 {
+		fmt.Errorf("Missing path")
 		os.Exit(10)
 	}
 
-	if err := engines.GetDockerTemplate(path, createDockerfile, useFig); err != nil {
-		fmt.Printf("Error: %s", err)
-		os.Exit(20)
+	path := c.Args()[0]
+	pathValidator := utils.NewPathValidator(path)
+
+	if err := pathValidator.ValidatePath(); err != nil {
+		fmt.Errorf("Error: %s", err)
+		os.Exit(11)
 	}
 
-	os.Exit(0)
+	if err := engines.GetDockerTemplate(path, c.Bool("docker"), c.Bool("fig")); err != nil {
+		fmt.Errorf("Error: %s", err)
+		os.Exit(20)
+	}
 }
