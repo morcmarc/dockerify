@@ -36,7 +36,7 @@ func (f FileUtilsMock) ReadFile(filename string) ([]byte, error) {
 func TestGenerateDockerfile(t *testing.T) {
 	golang := &Golang{}
 	writer := &WriterMock{}
-	expected := "FROM google/golang-runtime\n"
+	expected := "FROM dockerfile/go-runtime\n"
 
 	golang.GenerateDockerfile(writer)
 

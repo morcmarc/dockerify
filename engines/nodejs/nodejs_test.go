@@ -36,7 +36,7 @@ func (f FileUtilsMock) ReadFile(filename string) ([]byte, error) {
 func TestGenerateDockerfile(t *testing.T) {
 	ne := &NodeJs{}
 	writer := &WriterMock{}
-	expected := "FROM dockerfiles/nodejs-runtime\n"
+	expected := "FROM dockerfile/nodejs-runtime\n"
 
 	ne.GenerateDockerfile(writer)
 
