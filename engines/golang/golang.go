@@ -1,3 +1,6 @@
+/*
+
+*/
 package golang
 
 import (
@@ -38,7 +41,7 @@ func (g *Golang) Discover() bool {
 
 func (g *Golang) GenerateDockerfile(out io.Writer) error {
 	params := &docker.DockerfileParams{
-		Image: "google/golang-runtime",
+		Image: "dockerfile/go-runtime",
 	}
 	if err := docker.ParseTemplate(params, out); err != nil {
 		return err

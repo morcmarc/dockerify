@@ -1,6 +1,5 @@
 /*
-This package allows discovering NodeJS-type projects. Will try to see if there
-is a "package.json" file in the root path, then it'll do the following checks:
+Node project are identified by the following rules:
 
 	package.json (mandatory):
 		- there is a "server.js" in the root path
@@ -67,7 +66,7 @@ func (n *NodeJs) Discover() bool {
 
 func (n *NodeJs) GenerateDockerfile(out io.Writer) error {
 	params := &docker.DockerfileParams{
-		Image: "dockerfiles/nodejs-runtime",
+		Image: "dockerfile/nodejs-runtime",
 	}
 	if err := docker.ParseTemplate(params, out); err != nil {
 		return err

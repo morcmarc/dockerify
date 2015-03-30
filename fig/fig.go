@@ -1,5 +1,5 @@
 /*
-The fig package allows easy handling of fig configurations.
+Fig package allows easy handling of fig configs.
 */
 package fig
 
@@ -39,7 +39,7 @@ type FigFile struct {
 	Applications map[string]*FigApplication
 }
 
-// Creates a reference to a new FigFile
+// Create a new FigFile
 func NewFigFile() *FigFile {
 	f := &FigFile{
 		Applications: make(map[string]*FigApplication),
@@ -47,8 +47,8 @@ func NewFigFile() *FigFile {
 	return f
 }
 
-// Creates a FigApplication and validates it. A FigApplication must have either
-// an image or build attribute, if neither is given it will return an error.
+// Create a new FigApplication. Must have either an image or build attribute,
+// otherwise an error will be returned
 func NewFigApplication(image, build string) (*FigApplication, error) {
 	if image == "" && build == "" {
 		return nil, errors.New("You must provide either an image or a build attribute")
@@ -60,8 +60,7 @@ func NewFigApplication(image, build string) (*FigApplication, error) {
 	return fa, nil
 }
 
-// Adds the given FigApplication to the collection. The "name" attribute is an
-// identifier when the config is exported into the fig.yml file.
+// Append given FigApplication to the config.
 func (f *FigFile) AddApplication(name string, a *FigApplication) {
 	f.Applications[name] = a
 }
@@ -75,7 +74,7 @@ func (f *FigFile) GetYaml() ([]byte, error) {
 	return y, nil
 }
 
-// Writes the config onto the given io.Writer (which can be stdout or a file etc)
+// Write config onto the given io.Writer (i.e.: file, stdout etc)
 func (f *FigFile) WriteConfig(out io.Writer) error {
 	b, err := f.GetYaml()
 	if err != nil {

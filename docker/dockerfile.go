@@ -1,3 +1,6 @@
+/*
+Provides utility functions for generating dockerfiles.
+*/
 package docker
 
 import (
@@ -18,7 +21,7 @@ type DockerfileParams struct {
 const dockerfileTemplate = "FROM {{.Image}}\n{{if .Command}}CMD {{.Command}}\n{{end}}{{if .Expose}}EXPOSE {{.Expose}}\n{{end}}"
 
 /*
-Wraps each word in the given string in double-quotes, then the whole sentence
+Wrap each word in the given string in doublequotes, then the whole sentence
 into square brackets. Example:
 
 	"docker -t -i test/image ./run.sh" =>
@@ -40,8 +43,8 @@ func GetCommandString(commands string) string {
 	return "[" + strings.Join(commandStr, ",") + "]"
 }
 
-// Compiles a Dockerfile template with the given DockerfileParams and writes
-// the result to the specified output
+// Compile template with the given DockerfileParams and write the result onto
+// the output.
 func ParseTemplate(params *DockerfileParams, out io.Writer) error {
 	if err := ValidateTemplateParams(params); err != nil {
 		return err
@@ -61,7 +64,7 @@ func ParseTemplate(params *DockerfileParams, out io.Writer) error {
 	return nil
 }
 
-// Validates the given DockerfileParams object for mandatory attributes
+// Validate DockerfileParams object
 func ValidateTemplateParams(params *DockerfileParams) error {
 	if params.Image == "" {
 		return errors.New("Missing image parameter")

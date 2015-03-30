@@ -3,25 +3,25 @@ dockerify
 
 [![Build Status](https://travis-ci.org/morcmarc/dockerify.svg?branch=master)](https://travis-ci.org/morcmarc/dockerify) [![GoDoc](https://godoc.org/github.com/morcmarc/dockerify?status.svg)](https://godoc.org/github.com/morcmarc/dockerify)[ ![Download](https://api.bintray.com/packages/morcmarc/dockerify/dockerify/images/download.svg) ](https://bintray.com/morcmarc/dockerify/dockerify/_latestVersion)
 
-Small command-line utility for creating Dockerfiles easily. It will attempt to
-discover the project type (e.g.: NodeJS, Go etc) and generate a Dockerfile
-based on the curated list at [Dockerfile](http://dockerfile.github.io/).
+Small command-line utility for scaffolding Dockerfiles. It will attempt to
+identify the project type (i.e.: node+express, golang) and generate a Docker and
+Fig file -- using [Dockerfile](http://dockerfile.github.io/).
 
 ## Building
 
-For development:
+Development:
 
 ```bash
 $ make install
 ```
 
-To compile the release version install [goxc](https://github.com/laher/goxc) first then run:
+To compile the release version install [goxc](https://github.com/laher/goxc) and run:
 
 ```bash
 $ goxc
 ```
 
-This will output all cross-compiled binaries into your $GOPATH/bin folder.
+You can find the cross-compiled binaries at $GOPATH/bin
 
 ## Usage
 
@@ -29,11 +29,11 @@ This will output all cross-compiled binaries into your $GOPATH/bin folder.
 $ dockerify /path/to/project
 ```
 
-## Planned features (subject to change a lot)
+## Planned features (subject to change)
 
 - Full [fig](http://fig.sh) support
 
 ## Supported environments
 
-- NodeJS (runtime)
+- Node (runtime)
 - Go (runtime)

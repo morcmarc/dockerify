@@ -27,7 +27,7 @@ type PathValidator struct {
 	pathUtils PathUtils
 }
 
-// Returns a new PathValidator object
+// Create new PathValidator
 func NewPathValidator(path string) *PathValidator {
 	pu := &OSPathUtils{}
 	pv := &PathValidator{
@@ -37,8 +37,8 @@ func NewPathValidator(path string) *PathValidator {
 	return pv
 }
 
-// Checks whether the given path exists and is a directory. This is required
-// to make sure dockerify cannot be run on files.
+// Check whether the path exists and is a directory. Required because dockerify
+// cannot be run on files.
 func (p *PathValidator) ValidatePath() error {
 	if p.path == "" {
 		return errors.New("Invalid path")
@@ -53,8 +53,7 @@ func (p *PathValidator) ValidatePath() error {
 	return nil
 }
 
-// Checks whether the given list of filenames can be found relative to the base
-// path the object was initiated with.
+// Check that files can be found under the basepath.
 func (p *PathValidator) ValidateFiles(files []string) []string {
 	found := []string{}
 	for _, f := range files {

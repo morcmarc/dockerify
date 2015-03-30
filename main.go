@@ -23,6 +23,11 @@ func main() {
 			Name:  "docker, d",
 			Usage: "generate Dockerfile",
 		},
+		cli.StringFlag{
+			Name:  "env, e",
+			Usage: "environment type: [dev, prod]",
+			Value: "prod",
+		},
 	}
 	app.Action = func(c *cli.Context) {
 		runApp(c)
@@ -32,7 +37,7 @@ func main() {
 
 func runApp(c *cli.Context) {
 	if len(c.Args()) == 0 {
-		fmt.Errorf("Missing path")
+		fmt.Printf("Missing path")
 		os.Exit(10)
 	}
 
@@ -40,12 +45,17 @@ func runApp(c *cli.Context) {
 	pathValidator := utils.NewPathValidator(path)
 
 	if err := pathValidator.ValidatePath(); err != nil {
-		fmt.Errorf("Error: %s", err)
+		fmt.Printf("Error: %s", err)
 		os.Exit(11)
 	}
 
-	if err := engines.GetDockerTemplate(path, c.Bool("docker"), c.Bool("fig")); err != nil {
-		fmt.Errorf("Error: %s", err)
+	useDocker := c.Bool("docker")
+	useFig := c.Bool("fig")
+	env := c.String("env")
+
+	err := engines.GetDockerTemplate(path, useDocker, useFig, env)
+	if err != nil {
+		fmt.Printf("Error: %s", err)
 		os.Exit(20)
 	}
 }

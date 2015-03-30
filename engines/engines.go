@@ -19,14 +19,14 @@ import (
 )
 
 // Will attempt to determine project type at given path and create a Dockerfile
-func GetDockerTemplate(path string, createDockerfile, useFig bool) error {
+func GetDockerTemplate(path string, writeDockerfile, useFig bool, env string) error {
 	engines := createEngines(path)
 
 	for i, engine := range engines {
 		if engine.Discover() {
 			fmt.Printf("-->> %s\n", utils.Colorize("Found project type: "+i, utils.C_YELLOW))
 
-			dfw := getDockerfileWriter(path, createDockerfile)
+			dfw := getDockerfileWriter(path, writeDockerfile)
 			fmt.Printf("-->> %s\n", utils.Colorize("Writing Dockerfile", utils.C_GREEN))
 			engine.GenerateDockerfile(dfw)
 
@@ -58,9 +58,9 @@ func createEngines(path string) map[string]shared.Engine {
 	return engines
 }
 
-func getDockerfileWriter(path string, createDockerfile bool) io.Writer {
+func getDockerfileWriter(path string, writeDockerfile bool) io.Writer {
 	output := os.Stdout
-	if createDockerfile {
+	if writeDockerfile {
 		f, err := os.Create(p.Join(path, "Dockerfile"))
 		if err != nil {
 			panic(err)
